@@ -1,0 +1,21 @@
+# Environnement virtuel
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+
+# Résultats de simulation (si vous exportez des images/animations)
+output/
+*.gif
+*.png

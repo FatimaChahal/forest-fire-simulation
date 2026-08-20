@@ -1,0 +1,6 @@
+{
+  "hauteur": 10,
+  "largeur": 10,
+  "positions_feu_initial": [[5, 5]],
+  "probabilite_propagation": 0.6
+}
