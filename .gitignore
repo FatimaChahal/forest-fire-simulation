@@ -15,7 +15,4 @@ __pycache__/
 # OS
 .DS_Store
 
-# Résultats de simulation (si vous exportez des images/animations)
-output/
-*.gif
-*.png
+
