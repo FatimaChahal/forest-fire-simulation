@@ -43,6 +43,18 @@ Les paramètres sont définis dans `config.json` :
 }
 ```
 
+Un paramètre optionnel `seed` peut aussi être ajouté pour rendre la simulation reproductible (même résultat à chaque exécution) :
+
+```json
+{
+  "hauteur": 10,
+  "largeur": 10,
+  "positions_feu_initial": [[5, 5]],
+  "probabilite_propagation": 0.6,
+  "seed": 42
+}
+```
+
 ## Lancer la simulation
 
 ```bash
