@@ -4,11 +4,11 @@ Ce script est un outil de documentation, pas une IHM de simulation
 (l'énoncé exclut explicitement l'IHM du périmètre évalué).
 """
 
-import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation, PillowWriter
 
-from src.grid import Grid, VERT, ROUGE, GRIS
+from src.grid import GRIS, VERT, Grid
 from src.simulator import Simulator
 
 # Couleurs cohérentes avec l'affichage console (vert/rouge/gris)
