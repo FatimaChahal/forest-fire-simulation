@@ -106,6 +106,69 @@ class TestConfigValidation:
         with pytest.raises(ConfigError, match="introuvable"):
             ConfigLoader("fichier_qui_nexiste_pas.json").load()
 
+    def test_invalid_json_raises(self, tmp_path):
+        """Un JSON syntaxiquement invalide doit lever ConfigError."""
+        config_file = tmp_path / "bad_config.json"
+        config_file.write_text("{ceci n'est pas du json valide")
+
+        with pytest.raises(ConfigError, match="JSON invalide"):
+            ConfigLoader(str(config_file)).load()
+
+    def test_negative_width_raises(self, tmp_path):
+        """Une largeur négative doit lever ConfigError."""
+        config_file = tmp_path / "bad_config.json"
+        config_file.write_text(
+            '{"hauteur": 5, "largeur": -3, '
+            '"positions_feu_initial": [[2,2]], '
+            '"probabilite_propagation": 0.5}'
+        )
+        with pytest.raises(ConfigError, match="largeur"):
+            ConfigLoader(str(config_file)).load()
+
+    def test_malformed_position_raises(self, tmp_path):
+        """Une position qui n'est pas une paire [i, j] doit lever ConfigError."""
+        config_file = tmp_path / "bad_config.json"
+        config_file.write_text(
+            '{"hauteur": 5, "largeur": 5, '
+            '"positions_feu_initial": [[2, 2, 3]], '
+            '"probabilite_propagation": 0.5}'
+        )
+        with pytest.raises(ConfigError, match="mal formée"):
+            ConfigLoader(str(config_file)).load()
+
+    def test_non_integer_coordinates_raises(self, tmp_path):
+        """Des coordonnées non-entières doivent lever ConfigError."""
+        config_file = tmp_path / "bad_config.json"
+        config_file.write_text(
+            '{"hauteur": 5, "largeur": 5, '
+            '"positions_feu_initial": [["a", "b"]], '
+            '"probabilite_propagation": 0.5}'
+        )
+        with pytest.raises(ConfigError, match="entiers"):
+            ConfigLoader(str(config_file)).load()
+
+    def test_empty_positions_list_raises(self, tmp_path):
+        """Une liste de positions vide doit lever ConfigError."""
+        config_file = tmp_path / "bad_config.json"
+        config_file.write_text(
+            '{"hauteur": 5, "largeur": 5, '
+            '"positions_feu_initial": [], '
+            '"probabilite_propagation": 0.5}'
+        )
+        with pytest.raises(ConfigError, match="au moins une position"):
+            ConfigLoader(str(config_file)).load()
+
+    def test_grid_too_large_raises(self, tmp_path):
+        """Une grille dépassant MAX_GRID_DIMENSION doit lever ConfigError."""
+        config_file = tmp_path / "bad_config.json"
+        config_file.write_text(
+            '{"hauteur": 1000, "largeur": 5, '
+            '"positions_feu_initial": [[2,2]], '
+            '"probabilite_propagation": 0.5}'
+        )
+        with pytest.raises(ConfigError, match="trop grande"):
+            ConfigLoader(str(config_file)).load()
+
 class TestStatisticalPropagation:
 
     def test_propagation_rate_matches_probability(self):

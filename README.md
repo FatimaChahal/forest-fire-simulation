@@ -55,6 +55,13 @@ python3 main.py
 python3 -m pytest tests/ -v
 ```
 
+## Exécution avec Docker
+
+```bash
+docker build -t forest-fire-simulation .
+docker run --rm forest-fire-simulation
+```
+
 ## Architecture
 
 Le projet sépare les responsabilités en 4 modules indépendants :

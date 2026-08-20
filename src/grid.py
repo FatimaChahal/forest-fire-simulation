@@ -39,6 +39,10 @@ class Grid:
         """Compte le nombre de cases dans un état donné (utile pour les résumés)."""
         return int(np.sum(self.state == cell_type))
 
+    def restore_state(self, state: np.ndarray) -> None:
+        """Restaure un état précédemment sauvegardé (ex: depuis l'historique)."""
+        self.state = state.copy()
+
 
 class GridRenderer:
     """Responsable UNIQUEMENT de l'affichage visuel d'une Grid."""

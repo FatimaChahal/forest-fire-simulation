@@ -4,6 +4,7 @@ Usage:
     python3 main.py [config_path] [--detailed]
 """
 
+import argparse
 import logging
 import sys
 
@@ -49,7 +50,7 @@ def main(config_path: str = "config.json", detailed: bool = False) -> None:
     if detailed:
         for step_num, state in enumerate(history):
             print(f"\n--- Étape {step_num} ---")
-            grid.state = state
+            grid.restore_state(state)
             print(GridRenderer.render(grid))
     else:
         total_cells = grid.h * grid.l
@@ -63,8 +64,31 @@ def main(config_path: str = "config.json", detailed: bool = False) -> None:
         print(GridRenderer.render(grid))
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Simulation de propagation d'un feu de forêt."
+    )
+    parser.add_argument(
+        "config_path",
+        nargs="?",
+        default="config.json",
+        help="Chemin vers le fichier de configuration JSON (défaut: config.json)",
+    )
+    parser.add_argument(
+        "--detailed",
+        action="store_true",
+        help="Affiche chaque étape de la simulation plutôt qu'un résumé",
+    )
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+        help="Niveau de verbosité des logs (défaut: INFO)",
+    )
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
-    args = sys.argv[1:]
-    detailed = "--detailed" in args
-    config_arg = next((a for a in args if not a.startswith("--")), "config.json")
-    main(config_arg, detailed=detailed)
+    args = parse_args()
+    logging.getLogger().setLevel(args.log_level)
+    main(args.config_path, detailed=args.detailed)
